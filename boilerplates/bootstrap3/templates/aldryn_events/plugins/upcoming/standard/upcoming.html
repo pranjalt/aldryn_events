@@ -1,0 +1,20 @@
+	{% extends "aldryn_events/plugins/upcoming/base.html" %}
+	{% load i18n staticfiles cms_tags sekizai_tags thumbnail tz  %}
+
+	{% block plugin %}
+		<div class="aldryn aldryn-events aldryn-events-upcoming isotope track-records">
+			{% if plugin_configuration_error %}
+				{% if request.user.is_staff or request.user.is_superuser %}
+					<p class="config-errors">{{ plugin_configuration_error }}</p>
+				{% endif %}
+			{% else %}
+			{% for event in events %}
+				<div class="item" >
+						
+						  <img src="{% thumbnail event.image 800x250 crop subject_location=event.image.subject_location %}" alt="{{ event.image.alt }}" class="img-responsive">
+				   
+			   </div>
+				{% endfor %}
+			{% endif %}
+		</div>
+	{% endblock plugin %}

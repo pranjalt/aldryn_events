@@ -1,0 +1,30 @@
+{% load i18n staticfiles static sekizai_tags apphooks_config_tags %}
+{% block events_calendar %}
+ {% if namespace_error %}
+        {% if request.user.is_staff or request.user.is_superuser %}
+            <div class="events-calendar events-calendar-error">
+                <p class="config-errors">{{ namespace_error }}</p>
+            </div>
+        {% endif %}
+    {% else %}
+<div class="container">
+    <div class="events-calendar js-events-calendar"  data-url="{% namespace_url 'get-calendar-dates' namespace=calendar_tag.namespace %}"
+        data-pk="{{ plugin.instance.pk }}"
+        data-error="{% trans 'There was a problem accessing the calendar, please try again.'|escapejs %}"
+		style="    width: 85%;
+    padding-top: 5%;
+    padding-left: 4%;">
+        <h3>{{ calendar_tag.label }}</h3>
+        <p class="controls clearfix">
+            <a href="#" class="pull-left js-trigger" data-direction="previous"><img src={% static 'extra-images/Left.png'%}></a>
+			 <!-- <h4><span data-head-year></span> <span data-head-month></span></h4> -->
+            <a href="{% namespace_url 'events_list' namespace=calendar_tag.namespace %}"><img style="padding-left: 40%;padding-top: 1%;" src={% static 'extra-images/Today.png'%}></a>
+            <a href="#" class="pull-right js-trigger" data-direction="next"><img src={% static 'extra-images/Right.png'%}></a>
+        </p>
+		{% include "aldryn_events/includes/calendar_table.html" %}
+    </div>
+</div>
+	{% endif %}
+{% endblock %}
+<script src="{% static 'js/jquery.js' %}"></script>
+{% addtoblock "js" %}<script src="{% static 'js/addons/cl.events.js' %}"></script>{% endaddtoblock %}
